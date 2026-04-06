@@ -1,0 +1,112 @@
+import java.util.*;
+
+class Hacker {
+    int energy = 50;
+    int skill = 10;
+}
+
+class SystemDefence {
+    int security = 100;
+}
+
+public class Main {
+
+    static Scanner sc = new Scanner(System.in);
+    static Random rand = new Random();
+
+    public static void main(String[] args) {
+
+        Hacker h = new Hacker();
+        SystemDefence sys = new SystemDefence();
+
+        System.out.println("💻 HACKER SIMULATION GAME");
+        System.out.println("-------------------------");
+
+        while (h.energy > 0 && sys.security > 0) {
+
+            System.out.println("\n⚡ Energy: " + h.energy +
+                    " | 🧠 Skill: " + h.skill +
+                    " | 🔐 Security: " + sys.security);
+
+            System.out.println("1.Scan 2.Brute Force 3.Phishing 4.Upgrade");
+
+            int ch = input();
+
+            if (ch == 1) scan(h, sys);
+            else if (ch == 2) brute(h, sys);
+            else if (ch == 3) phishing(h, sys);
+            else if (ch == 4) upgrade(h);
+
+            // AI defense
+            defence(sys);
+
+            if (sys.security <= 0) {
+                System.out.println("\n💥 SYSTEM HACKED SUCCESSFULLY!");
+                return;
+            }
+
+            if (h.energy <= 0) {
+                System.out.println("\n💀 YOU FAILED (Out of energy)");
+                return;
+            }
+        }
+    }
+
+    static void scan(Hacker h, SystemDefence sys) {
+        System.out.println("🔍 Scanning system...");
+        System.out.println("Security Level: " + sys.security);
+        h.energy -= 5;
+    }
+
+    static void brute(Hacker h, SystemDefence sys) {
+        if (h.energy >= 10) {
+            int dmg = h.skill + rand.nextInt(10);
+            sys.security -= dmg;
+            h.energy -= 10;
+            System.out.println("💣 Brute Force Damage: " + dmg);
+        } else System.out.println("❌ Not enough energy");
+    }
+
+    static void phishing(Hacker h, SystemDefence sys) {
+        if (h.energy >= 15) {
+            int success = rand.nextInt(100);
+            if (success > 50) {
+                int dmg = h.skill * 2;
+                sys.security -= dmg;
+                System.out.println("🎯 Phishing Success! Damage: " + dmg);
+            } else {
+                System.out.println("❌ Phishing failed");
+            }
+            h.energy -= 15;
+        }
+    }
+
+    static void upgrade(Hacker h) {
+        if (h.energy >= 10) {
+            h.skill += 5;
+            h.energy -= 10;
+            System.out.println("⚡ Skill upgraded!");
+        }
+    }
+
+    static void defence(SystemDefence sys) {
+        int action = rand.nextInt(2);
+
+        if (action == 0) {
+            sys.security += 5;
+            System.out.println("🛡️ System patched +5 security");
+        } else {
+            System.out.println("⚠️ Firewall active");
+        }
+    }
+
+    static int input() {
+        while (true) {
+            if (sc.hasNextInt()) {
+                int x = sc.nextInt();
+                if (x >= 1 && x <= 4) return x;
+            } else sc.next();
+            System.out.println("Invalid");
+        }
+    }
+}
